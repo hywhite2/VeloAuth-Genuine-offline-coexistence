@@ -455,11 +455,6 @@ public class ConnectionManager {
     private void scheduleBackendWaitRetry(Player player, int attempt) {
         UUID playerUuid = player.getUniqueId();
 
-        if (attempt == 0) {
-            player.sendMessage(Component.text(
-                    messages.get("connection.waiting_for_server"),
-                    NamedTextColor.YELLOW));
-        }
 
         if (attempt >= MAX_BACKEND_WAIT_RETRIES) {
             backendWaitTasks.remove(playerUuid);
@@ -488,12 +483,6 @@ public class ConnectionManager {
                         NamedTextColor.GREEN));
                 executeBackendTransfer(player, server.get(), server.get().getServerInfo().getName());
             } else {
-                if (attempt % BACKEND_WAIT_REMINDER_INTERVAL == BACKEND_WAIT_REMINDER_INTERVAL - 1) {
-                    // Remind every 30 seconds
-                    player.sendMessage(Component.text(
-                            messages.get("connection.waiting_for_server"),
-                            NamedTextColor.YELLOW));
-                }
                 scheduleBackendWaitRetry(player, attempt + 1);
             }
         }).delay(BACKEND_WAIT_INTERVAL_SECONDS, TimeUnit.SECONDS).schedule();
