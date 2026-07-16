@@ -357,6 +357,10 @@ public class Settings {
         return alertSettings;
     }
 
+    public boolean isPremiumUuid() {
+        return premiumSettings.isPremiumUuid();
+    }
+
     // ===== Inner Settings Classes =====
 
     /**
