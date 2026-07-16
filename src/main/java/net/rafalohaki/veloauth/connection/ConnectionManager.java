@@ -459,9 +459,6 @@ public class ConnectionManager {
         if (attempt >= MAX_BACKEND_WAIT_RETRIES) {
             backendWaitTasks.remove(playerUuid);
             logger.warn("Backend wait timeout for {} after {} attempts", player.getUsername(), attempt);
-            player.sendMessage(Component.text(
-                    messages.get("connection.error.no_servers"),
-                    NamedTextColor.RED));
             return;
         }
 
