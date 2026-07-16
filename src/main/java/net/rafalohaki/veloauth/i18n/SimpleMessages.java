@@ -48,7 +48,7 @@ public final class SimpleMessages {
      */
     private Component parseWithColors(String text, NamedTextColor fallbackColor) {
         if (text == null || text.isEmpty()) {
-            return Component.empty();
+            return null;
         }
         
         // Check if text contains color codes
