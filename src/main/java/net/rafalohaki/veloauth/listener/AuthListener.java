@@ -467,11 +467,36 @@ public class AuthListener {
         }
 
         if (!settings.isPremiumUuid()) {
-            UUID premiumUuid = event.getGameProfile().getId();
-            UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + event.getUsername()).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            event.setGameProfile(event.getGameProfile().withId(offlineUuid));
-            logger.info("[PREMIUM UUID] Player {} - converted premium UUID {} to offline UUID {}",
-                    event.getUsername(), premiumUuid, offlineUuid);
+            var originalProfile = event.getGameProfile();
+
+            UUID premiumUuid = originalProfile.getId();
+
+            UUID offlineUuid = UUID.nameUUIDFromBytes(
+                    ("OfflinePlayer:" + event.getUsername())
+                            .getBytes(java.nio.charset.StandardCharsets.UTF_8)
+            );
+
+            /*
+             * 保留 Mojang GameProfile properties
+             *
+             * 包括:
+             * - textures
+             * - textures signature
+             *
+             * 只替换 UUID，不破坏皮肤数据
+             */
+            var newProfile = originalProfile
+                    .withId(offlineUuid)
+                    .withProperties(originalProfile.getProperties());
+
+            event.setGameProfile(newProfile);
+
+            logger.info(
+                    "[PREMIUM UUID] Player {} - converted premium UUID {} to offline UUID {} while keeping properties",
+                    event.getUsername(),
+                    premiumUuid,
+                    offlineUuid
+            );
         }
     }
 
